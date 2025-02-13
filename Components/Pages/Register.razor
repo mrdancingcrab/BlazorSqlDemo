@@ -1,0 +1,47 @@
+﻿@page "/register"
+@using BlazorSql.Models
+@using BlazorSql.Data
+@rendermode InteractiveServer
+@inject EmployeeService employeeService
+
+
+
+<h3>Register new Employee</h3>
+
+<EditForm Model="employee" OnValidSubmit="HandleValidSubmit">
+    <div>
+        <label>First Name:</label>
+        <InputText @bind-Value="employee.FirstName"/>
+    </div>
+    <div>
+        <label>Last Name:</label>
+        <InputText @bind-Value="employee.LastName"/>
+    </div>
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value="employee.Email"/>
+    </div>
+    <div>
+        <label>Position:</label>
+        <InputText @bind-Value="employee.Position"/>
+    </div>
+
+    <button type="submit">Register</button>
+</EditForm>
+
+@if (successMessage != null)
+{
+    <p>@successMessage</p>
+}
+
+@code {
+    private Employee employee = new();
+    private string successMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        await employeeService.AddEmployee(employee);
+        successMessage = "Employee has been added";
+        employee = new Employee();
+    }
+}
